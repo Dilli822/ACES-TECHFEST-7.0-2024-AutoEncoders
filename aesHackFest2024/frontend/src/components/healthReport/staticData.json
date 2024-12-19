@@ -1,0 +1,13 @@
+{
+    "patient": {
+      "id": "P123456",
+      "firstName": "John",
+      "lastName": "Doe",
+      "age": 45,
+      "gender": "Male",
+      "contact": {
+        "phone": "+1234567890",
+        "email": "johndoe@example.com"
+      }
+    }
+  }
