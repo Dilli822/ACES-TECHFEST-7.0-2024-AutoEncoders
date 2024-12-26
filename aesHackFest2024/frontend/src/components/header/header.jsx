@@ -258,7 +258,7 @@ const Header = () => {
                     }}
                     onClick={handleClick}
                   >
-                    AI Diagnosis/Prediction Test &nbsp;
+                    AI Diagnosis Test &nbsp;
                     <i
                       className="fa fa-caret-down"
                       style={{

@@ -13,65 +13,34 @@ import Header from "../header/header";
 import AppFooter from "../footer/footer";
 import { BarChart } from "@mui/x-charts/BarChart";
 
-const barData = [
-  {
-    predictions: [""],
-    accuracy: 0.00,
-    precision: 0.00,
-    error: 0.00,
-    recall: 0.00,
-    f1_score: 0.00
-  },
+const xLabels = ["accuracy", "precision", "error", "f1_score"];
+
+const formFields = [
+  { label: "Mean Radius", name: "radius_mean" },
+  { label: "Mean Texture", name: "texture_mean" },
+  { label: "Mean Perimeter", name: "perimeter_mean" },
+  { label: "Mean Area", name: "area_mean" },
+  { label: "Perimeter Error", name: "perimeter_error" },
+  { label: "Area Error", name: "area_error" },
+  { label: "Worst Radius", name: "radius_worst" },
+  { label: "Worst Texture", name: "texture_worst" },
+  { label: "Worst Perimeter", name: "perimeter_worst" },
+  { label: "Worst Area", name: "area_worst" },
 ];
 
 function CancerPredictionForm() {
-  const xLabels = ["accuracy", "precision", "error", "f1_score"];
   const [formData, setFormData] = useState(
-    Object.fromEntries(
-      [
-        "radius_mean",
-        "texture_mean",
-        "perimeter_mean",
-        "area_mean",
-        "smoothness_mean",
-        "compactness_mean",
-        "concavity_mean",
-        "concave_points_mean",
-        "symmetry_mean",
-        "fractal_dimension_mean",
-        "radius_se",
-        "texture_se",
-        "perimeter_se",
-        "area_se",
-        "smoothness_se",
-        "compactness_se",
-        "concavity_se",
-        "concave_points_se",
-        "symmetry_se",
-        "fractal_dimension_se",
-        "radius_worst",
-        "texture_worst",
-        "perimeter_worst",
-        "area_worst",
-        "smoothness_worst",
-        "compactness_worst",
-        "concavity_worst",
-        "concave_points_worst",
-        "symmetry_worst",
-        "fractal_dimension_worst",
-      ].map((key) => [key, ""])
-    )
+    Object.fromEntries(formFields.map((field) => [field.name, ""]))
   );
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const [responseData, setResponseData] = useState(null);
   const [chartData, setChartData] = useState({
-    accuracy: 0.00,
-    precision: 0.00,
-    error: 0.00,
-    f1_score: 0.00
+    accuracy: 0.0,
+    precision: 0.0,
+    error: 0.0,
+    f1_score: 0.0,
   });
   const theme = useTheme();
 
@@ -136,11 +105,11 @@ function CancerPredictionForm() {
           accuracy,
           precision,
           error,
-          f1_score
+          f1_score,
         });
 
         setFormData(
-          Object.fromEntries(Object.keys(formData).map((key) => [key, ""]))
+          Object.fromEntries(formFields.map((field) => [field.name, ""]))
         );
       } else {
         setError(`Error: ${data.message || "Something went wrong"}`);
@@ -168,7 +137,7 @@ function CancerPredictionForm() {
               }}
             >
               <Typography
-                variant="h3"
+                variant="h4"
                 align="center"
                 sx={{
                   color: theme.palette.primary.main,
@@ -178,32 +147,27 @@ function CancerPredictionForm() {
                 Cancer Prediction
               </Typography>
               <Typography
-                variant="h5"
+                variant="body2"
                 align="center"
-                sx={{ color: "gray", fontWeight: "light", mb: "30px" }}
+                sx={{ color: "red", fontWeight: "light", mb: "30px" }}
               >
-                Predict the likelihood of cancer based on various features.
+                Predict the likelihood of cancer based on various features. AI
+                Only for Assist Check the probability of having diabetes or not.
+                This information is intended only for doctors and professionally
+                authorized healthcare providers for further evaluation and
+                diagnosis.
               </Typography>
-              {error && (
-                <Alert severity="error" sx={{ marginBottom: 2 }}>
-                  {error}
-                </Alert>
-              )}
-              {success && (
-                <Alert severity="success" sx={{ marginBottom: 2 }}>
-                  {success}
-                </Alert>
-              )}
+
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                  {Object.keys(formData).map((key) => (
-                    <Grid item xs={12} sm={4} key={key}>
+                  {formFields.map(({ label, name }) => (
+                    <Grid item xs={12} sm={4} key={name}>
                       <TextField
                         fullWidth
-                        label={key.replace(/_/g, " ").toUpperCase()}
+                        label={label}
                         variant="standard"
-                        name={key}
-                        value={formData[key]}
+                        name={name}
+                        value={formData[name]}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -231,6 +195,17 @@ function CancerPredictionForm() {
                     {loading ? "Submitting..." : "Submit"}
                   </Button>
                 </Box>
+                <br />
+                {error && (
+                  <Alert severity="error" sx={{ marginBottom: 2 }}>
+                    {error}
+                  </Alert>
+                )}
+                {success && (
+                  <Alert severity="success" sx={{ marginBottom: 2 }}>
+                    {success}
+                  </Alert>
+                )}
               </form>
             </Box>
           </Grid>
@@ -246,36 +221,34 @@ function CancerPredictionForm() {
               }}
             >
               <Typography
-                variant="h5"
-                align="left"
+                variant="h6"
+                align="center"
                 sx={{ color: theme.palette.secondary.main, fontWeight: "bold" }}
               >
-                Cancer Diagnosis Prediction Statistics Data
+                Cancer Diagnosis Prediction Comparison Statistics Data
               </Typography>
-              <Typography
-                variant="body1"
-                align="center"
-                sx={{ color: "gray", mt: 2 }}
-              >
-                Comparison of accuracy, precision and error.
-              </Typography>
+
               <BarChart
                 width={300}
                 height={300}
-                series={[
-                  { data: [chartData.accuracy], label: "acc", id: "accId" },
-                  { data: [chartData.precision], label: "pre", id: "preId" },
-                  { data: [chartData.error], label: "err", id: "errId" }, // Add third series
-                  { data: [chartData.f1_score], label: "f1", id: "f1Id" },
-                ]}
                 xAxis={[{ data: xLabels, scaleType: "band" }]}
+                series={[
+                  {
+                    data: [chartData.accuracy],
+                    label: "Accuracy",
+                    id: "accId",
+                  },
+                  {
+                    data: [chartData.precision],
+                    label: "Precision",
+                    id: "preId",
+                  },
+                  { data: [chartData.error], label: "Error", id: "errId" },
+                  { data: [chartData.f1_score], label: "F1 Score", id: "f1Id" },
+                ]}
               />
-
               {responseData && responseData.predictions && (
-                <Box sx={{ mt: 4 }}>
-                  <Typography variant="h5" sx={{ mb: 2 }}>
-                    Predictions:
-                  </Typography>
+                <Box sx={{ mt: 2 }}>
                   {responseData.predictions.map((prediction, index) => (
                     <Box
                       key={index}
@@ -289,18 +262,50 @@ function CancerPredictionForm() {
                         marginBottom: 2,
                       }}
                     >
-                      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                        Prediction {index + 1}: {prediction}
+                      <Typography
+                        variant="body1"
+                        sx={{ fontWeight: "bold", fontSize: "14px" }}
+                      >
+                        Prediction {index + 1}:{" "}
+                        {prediction === "Malignant" ? (
+                          <>
+                            Malignant (Cancerous) - Please consult with a
+                            healthcare professional for further evaluation.
+                          </>
+                        ) : (
+                          <>
+                            Benign - This result suggests a non-cancerous
+                            condition, but consulting with a doctor is
+                            recommended for confirmation.
+                          </>
+                        )}
                       </Typography>
                     </Box>
                   ))}
                 </Box>
               )}
+              <Box sx={{ mt: 0 }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "white",
+                    backgroundColor: "purple",
+                    borderRadius: 2,
+                    padding: 2,
+                    marginBottom: 2,
+                  }}
+                >
+                  **Disclaimer**: <br />
+                  The predictions provided by this tool are totally Machine
+                  Learning Model and should not be used as a sole basis for
+                  making medical decisions. This tool is intended only for use
+                  by licensed medical practitioners.
+                </Typography>
+              </Box>
             </Box>
           </Grid>
         </Grid>
       </Container>
-
       <AppFooter />
     </>
   );

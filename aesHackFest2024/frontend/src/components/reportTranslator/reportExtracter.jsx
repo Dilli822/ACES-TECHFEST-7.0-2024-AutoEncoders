@@ -182,21 +182,21 @@ const OCRComponent = () => {
     if (fastingResult === "Normal" && postprandialResult === "Normal") {
       resultMessage += "Your blood sugar levels are within the normal range.\n";
       resultMessage +=
-        "Maintain a balanced diet, exercise regularly, and monitor your health periodically.";
+        "Maintain a balanced diet, exercise regularly, and monitor your health periodically.           Remember: Model can make mistakes. This model is only to assist/pre-informed you. Please consult your doctor for 100% accurate report translation.";
     } else if (
       fastingResult === "Pre-diabetes (Impaired Fasting Glucose)" ||
       postprandialResult === "Pre-diabetes (Impaired Glucose Tolerance)"
     ) {
       resultMessage += "You are in the pre-diabetes range.\n";
       resultMessage +=
-        "Consider lifestyle changes to prevent progression to diabetes, including diet and exercise.";
+        "Consider lifestyle changes to prevent progression to diabetes, including diet and exercise.           Remember: Model can make mistakes. This model is only to assist/pre-informed you. Please consult your doctor for 100% accurate report translation.";
     } else if (
       fastingResult === "Diabetes" ||
       postprandialResult === "Diabetes"
     ) {
       resultMessage += "Your blood sugar levels indicate diabetes.\n";
       resultMessage +=
-        "Consult with your healthcare provider for personalized treatment.";
+        "Consult with your healthcare provider for personalized treatment.Remember: Model can make mistakes. This model is only to assist/pre-informed you. Please consult your doctor for 100% accurate report translation.";
     }
 
     return resultMessage;
@@ -205,11 +205,19 @@ const OCRComponent = () => {
   return (
     <ThemeProvider theme={theme}>
       <br />
-      <Container style={{     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          borderRadius: "8px", }}>
-                    <br />
+      <Container
+        style={{
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+        }}
+      >
+        <br />
         <Typography variant="h4" align="left" color="primary" gutterBottom>
-          OCR Simple Diabetes Report Analysis
+          OCR Simple Report Analysis (Only Diabetes)
+        </Typography>
+        <Typography variant="body2" align="left" color="purple" gutterBottom>
+          Remember: Model can make mistakes. This model is only to assist/pre-informed you.
+          Please consult your doctor for 100% accurate report translation.
         </Typography>
         <br />
 
@@ -230,7 +238,7 @@ const OCRComponent = () => {
             onChange={(e) => setParagraph(e.target.value)}
             style={{ marginBottom: "1rem" }}
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          <Button type="submit" variant="contained" color="primary">
             Evaluate
           </Button>
         </form>
@@ -250,22 +258,15 @@ const OCRComponent = () => {
             <Typography variant="body1" style={{ whiteSpace: "pre-line" }}>
               {result}
             </Typography>
-
             <Button
               onClick={toggleSpeech}
               variant="contained"
               color={isPlaying ? "secondary" : "primary"}
-              fullWidth
             >
               {isPlaying ? "Pause Speech" : "Play Speech"}
             </Button>
-
-            <Button
-              onClick={stopSpeech}
-              variant="contained"
-              color="secondary"
-              fullWidth
-            >
+            &nbsp; &nbsp;
+            <Button onClick={stopSpeech} variant="contained" color="secondary">
               Stop Speech
             </Button>
           </Box>
@@ -275,11 +276,13 @@ const OCRComponent = () => {
           onClick={() => sendToBackend(result)}
           variant="contained"
           color="primary"
-          fullWidth
           style={{ marginTop: "1rem" }}
         >
           Translate
         </Button>
+
+        <br />
+        <br />
 
         {/* Render translated data */}
         {translatedData && (
@@ -314,6 +317,8 @@ const OCRComponent = () => {
             </Typography>
           </Box>
         )}
+        <br />
+        <br />
       </Container>
     </ThemeProvider>
   );

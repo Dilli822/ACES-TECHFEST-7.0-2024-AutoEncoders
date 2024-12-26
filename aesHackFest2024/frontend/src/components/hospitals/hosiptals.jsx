@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Grid, Typography, Button, TextField, Box, Paper } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
+import PhoneIcon from '@mui/icons-material/Phone'; // Import the Phone icon
 import axios from "axios";
 
 
@@ -2034,44 +2035,63 @@ const hospitals = [
 // Hospital Card Component
 const HospitalCard = ({ hospital }) => {
   return (
-    <Grid item xs={12} sm={6} md={4}>
-      <Paper
-        elevation={3}
-        sx={{
-          padding: 3,
-          borderRadius: 2,
-          border: "1px solid #ddd",
-          backgroundColor: "#f7f7f7",
-        }}
+<Grid 
+  item 
+  xs={12} 
+  sm={6} 
+  md={4} 
+  sx={{ 
+    display: "flex", 
+    alignItems: "stretch" 
+  }}
+>
+  <Paper
+    elevation={3}
+    sx={{
+      padding: 3,
+      borderRadius: 2,
+      border: "1px solid #ddd",
+      backgroundColor: "#f7f7f7",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      flexGrow: 1,
+    }}
+  >
+    <Typography variant="h6" sx={{ color: "#2c3e50", fontWeight: "bold" }}>
+      {hospital.name}
+    </Typography>
+    <Typography sx={{ color: "success" }}>
+      {hospital.location}
+    </Typography>
+    <Typography sx={{ color: "success" }}>
+      <strong>Phone:</strong> {hospital.contact_info.phone}
+    </Typography>
+    <Typography sx={{ color: "success" }}>
+      <strong>Email:</strong> {hospital.contact_info.email}
+    </Typography>
+    <Typography sx={{ color: "success" }}>
+      <strong>Website:</strong>{" "}
+      <a
+        href={hospital.contact_info.website}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "success" }}
       >
-        <Typography variant="h6" sx={{ color: "#2c3e50", fontWeight: "bold" }}>
-          {hospital.name}
-        </Typography>
-        <Typography sx={{ color: "#34495e" }}>
-          {hospital.location}
-        </Typography>
-        <Typography sx={{ color: "#16a085" }}>
-          <strong>Phone:</strong> {hospital.contact_info.phone}
-        </Typography>
-        <Typography sx={{ color: "#16a085" }}>
-          <strong>Email:</strong> {hospital.contact_info.email}
-        </Typography>
-        <Typography sx={{ color: "#16a085" }}>
-          <strong>Website:</strong>{" "}
-          <a
-            href={hospital.contact_info.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#16a085" }}
-          >
-            {hospital.contact_info.website}
-          </a>
-        </Typography>
-        <Button variant="contained" color="success" sx={{ marginTop: 1 }}>
-          Contact
-        </Button>
-      </Paper>
-    </Grid>
+        {hospital.contact_info.website}
+      </a>
+    </Typography>
+    <Button
+      variant="contained"
+      sx = {{  backgroundColor: "red" , marginTop: 1 }}
+      startIcon={<PhoneIcon />} // Add the call icon here
+      onClick={() => window.open(`tel:${hospital.contact_info.phone}`, '_self')}
+    >
+      Contact
+    </Button>
+  </Paper>
+</Grid>
+
   );
 };
 
@@ -2196,7 +2216,7 @@ const HospitalList = () => {
           </Grid>
 
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 2 }}>
-            <Button
+            {/* <Button
               variant="contained"
               color="success"
               onClick={toggleShowMore}
@@ -2224,7 +2244,7 @@ const HospitalList = () => {
                   Next
                 </Button>
               </Box>
-            )}
+            )} */}
           </Box>
         </>
       ) : (

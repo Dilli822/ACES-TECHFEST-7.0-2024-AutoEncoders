@@ -146,7 +146,12 @@ const FAQsSection = () => {
       <Box>
         <Typography variant="h4" align="center" gutterBottom>
           Frequently Asked Questions
+          <Typography variant="body1" align="center" gutterBottom>
+          Possible HealthCare Q&A
         </Typography>
+        </Typography>
+        <br />
+      
         {randomFaqs.map((faq, index) => (
           <Accordion key={index} sx={{ marginBottom: 2 }}>
             <AccordionSummary
